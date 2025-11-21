@@ -4,12 +4,15 @@
     :disabled="disabled || loading"
     @click="$emit('click', $event)"
   >
+    <img v-if="icon" :src="iconUrl" :alt="icon" class="btn-icon" />
     <span v-if="loading" class="spinner"></span>
     <slot />
   </button>
 </template>
 
 <script>
+import { computed } from 'vue'
+
 export default {
   name: 'BaseButton',
   props: {
@@ -25,9 +28,23 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    icon: {
+      type: String,
+      default: null
     }
   },
-  emits: ['click']
+  emits: ['click'],
+  setup(props) {
+    const iconUrl = computed(() => {
+      if (!props.icon) return null
+      return new URL(`../../assets/icons/${props.icon}.svg`, import.meta.url).href
+    })
+
+    return {
+      iconUrl
+    }
+  }
 }
 </script>
 
@@ -84,6 +101,12 @@ export default {
 
 .btn-warning:hover:not(:disabled) {
   background-color: #e67e22;
+}
+
+.btn-icon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
 }
 
 .spinner {
