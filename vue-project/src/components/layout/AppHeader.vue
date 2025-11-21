@@ -7,7 +7,11 @@
       <nav class="navigation">
         <ul>
           <li><a href="#" @click="$emit('navigate', 'home')">Accueil</a></li>
-          <li><a href="#" @click="$emit('navigate', 'about')">À propos</a></li>
+          <li><a href="#" @click="$emit('navigate', 'table')">Tableaux</a></li>
+          <li><a href="#" @click="$emit('navigate', 'actions')">Boutons</a></li>
+          <li><a href="#" @click="$emit('navigate', 'inputs')">Inputs</a></li>
+          <li><a href="#" @click="$emit('navigate', 'titles')">Titres</a></li>
+          <li><a href="#" @click="$emit('navigate', 'demo')">Demo</a></li>
         </ul>
       </nav>
     </div>
