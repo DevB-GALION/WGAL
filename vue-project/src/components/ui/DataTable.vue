@@ -126,7 +126,7 @@ export default {
     // Tri initial
     defaultSort: {
       type: Object,
-      default: () => ({ column: null, direction: 'asc' })z
+      default: () => ({ column: null, direction: 'asc' })
     }
   },
   setup(props) {
