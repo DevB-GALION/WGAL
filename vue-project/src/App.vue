@@ -34,16 +34,16 @@ const handleNavigate = (page) => {
         <h2>Démonstration des composants UI</h2>
         
         <div class="buttons-demo">
-          <BaseButton variant="primary" icon="home">Bouton Principal</BaseButton>
+          <BaseButton variant="primary" icon="Groupes_orange">Bouton Principal</BaseButton>
           <BaseButton variant="secondary">Bouton Secondaire</BaseButton>
           <BaseButton variant="danger">Bouton Danger</BaseButton>
           <BaseButton variant="warning">Bouton Warning</BaseButton>
           <BaseButton :loading="true">Chargement...</BaseButton>
           <BaseButton :disabled="true">Désactivé</BaseButton>
 
-          <BaseButton size="small" icon="check">Petit</BaseButton>
-          <BaseButton size="medium" icon="home">Moyen</BaseButton>
-          <BaseButton size="large" icon="smile">Grand</BaseButton>
+          <BaseButton size="small" icon="Groupes_orange">Petit</BaseButton>
+          <BaseButton size="medium" icon="Groupes_orange">Moyen</BaseButton>
+          <BaseButton size="large" icon="Groupes_orange">Grand</BaseButton>
           <BaseButton size="xlarge" variant="danger">Très Grand</BaseButton>
         </div>
       </div>
