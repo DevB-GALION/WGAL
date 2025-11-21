@@ -1,6 +1,6 @@
 <template>
   <button 
-    :class="['btn', `btn-${variant}`, { 'btn-loading': loading }]"
+    :class="['btn', `btn-${variant}`, sizeClasses, { 'btn-loading': loading }]"
     :disabled="disabled || loading"
     @click="$emit('click', $event)"
   >
@@ -32,6 +32,11 @@ export default {
     icon: {
       type: String,
       default: null
+    },
+    size: {
+      type: String,
+      default: 'medium',
+      validator: (value) => ['small', 'medium', 'large', 'xlarge'].includes(value)
     }
   },
   emits: ['click'],
@@ -41,8 +46,13 @@ export default {
       return new URL(`../../assets/icons/${props.icon}.svg`, import.meta.url).href
     })
 
+    const sizeClasses = computed(() => {
+      return `btn-${props.size}`
+    })
+
     return {
-      iconUrl
+      iconUrl,
+      sizeClasses
     }
   }
 }
@@ -50,16 +60,14 @@ export default {
 
 <style scoped>
 .btn {
-  padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: var(--border-radius);
-  font-size: 1rem;
+  border-radius: 0.5vh;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.3vw;
 }
 
 .btn:disabled {
@@ -67,6 +75,32 @@ export default {
   cursor: not-allowed;
 }
 
+/* Tailles du bouton */
+.btn-small {
+  padding: 1vh 2vw;
+  font-size: 1.8vh;
+  height: 4vh;
+}
+
+.btn-medium {
+  padding: 1.5vh 3vw;
+  font-size: 2.2vh;
+  height: 5vh;
+}
+
+.btn-large {
+  padding: 2vh 4vw;
+  font-size: 2.6vh;
+  height: 6vh;
+}
+
+.btn-xlarge {
+  padding: 2.5vh 5vw;
+  font-size: 3vh;
+  height: 7vh;
+}
+
+/* Couleurs des variantes */
 .btn-primary {
   background-color: var(--primary-color);
   color: white;
@@ -103,17 +137,21 @@ export default {
   background-color: #e67e22;
 }
 
+/* Icône - prend la hauteur du bouton */
 .btn-icon {
-  width: 1rem;
-  height: 1rem;
-  margin-right: 0.5rem;
+  height: 250%;
+  width: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
 }
 
+/* Spinner */
 .spinner {
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
+  height: 80%;
+  width: auto;
+  aspect-ratio: 1;
+  border: 0.2vh solid transparent;
+  border-top: 0.2vh solid currentColor;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -121,6 +159,33 @@ export default {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* Responsive pour très petits écrans */
+@media (max-width: 480px) {
+  .btn-small {
+    padding: 0.8vh 1.5vw;
+    font-size: 1.6vh;
+    height: 3.5vh;
+  }
+  
+  .btn-medium {
+    padding: 1.2vh 2.5vw;
+    font-size: 2vh;
+    height: 4.5vh;
+  }
+  
+  .btn-large {
+    padding: 1.8vh 3.5vw;
+    font-size: 2.4vh;
+    height: 5.5vh;
+  }
+  
+  .btn-xlarge {
+    padding: 2.2vh 4.5vw;
+    font-size: 2.8vh;
+    height: 6.5vh;
   }
 }
 </style>

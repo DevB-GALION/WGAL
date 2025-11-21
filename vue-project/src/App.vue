@@ -34,6 +34,11 @@ const handleNavigate = (page) => {
           <BaseButton variant="warning">Bouton Warning</BaseButton>
           <BaseButton :loading="true">Chargement...</BaseButton>
           <BaseButton :disabled="true">Désactivé</BaseButton>
+
+          <BaseButton size="small" icon="Analytics_green">Petit</BaseButton>
+          <BaseButton size="medium" icon="Analytics_green">Moyen</BaseButton>
+          <BaseButton size="large" icon="Analytics_green">Grand</BaseButton>
+          <BaseButton size="xlarge" variant="Analytics_green">Très Grand</BaseButton>
         </div>
       </div>
     </main>
