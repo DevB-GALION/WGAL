@@ -7,7 +7,8 @@
       <nav class="navigation">
         <ul>
           <li><a href="#" @click="$emit('navigate', 'home')">Accueil</a></li>
-          <li><a href="#" @click="$emit('navigate', 'about')">À propos</a></li>
+          <li><a href="#" @click="$emit('navigate', 'table')">Tableaux</a></li>
+          <li><a href="#" @click="$emit('navigate', 'demo')">Composants</a></li>
         </ul>
       </nav>
     </div>

@@ -3,6 +3,7 @@
 import BaseButton from '@/components/ui/BaseButton.vue'
 import AppHeader from '@/components/layout/AppHeader.vue'
 import HomePage from '@/pages/HomePage.vue'
+import TableDemo from '@/pages/TableDemo.vue'
 
 // Import du CSS global
 import '@/assets/styles/main.css'
@@ -22,23 +23,24 @@ const handleNavigate = (page) => {
     
     <main class="main-content">
       <HomePage v-if="currentPage === 'home'" />
+      <TableDemo v-if="currentPage === 'table'" />
       
       <!-- Exemple d'utilisation des composants UI -->
-      <div class="demo-section">
+      <div v-if="currentPage === 'demo'" class="demo-section">
         <h2>Démonstration des composants UI</h2>
         
         <div class="buttons-demo">
-          <BaseButton variant="primary" icon="Analytics_green" >Bouton Principal</BaseButton>
+          <BaseButton variant="primary" icon="home">Bouton Principal</BaseButton>
           <BaseButton variant="secondary">Bouton Secondaire</BaseButton>
           <BaseButton variant="danger">Bouton Danger</BaseButton>
           <BaseButton variant="warning">Bouton Warning</BaseButton>
           <BaseButton :loading="true">Chargement...</BaseButton>
           <BaseButton :disabled="true">Désactivé</BaseButton>
 
-          <BaseButton size="small" icon="Analytics_green">Petit</BaseButton>
-          <BaseButton size="medium" icon="Analytics_green">Moyen</BaseButton>
-          <BaseButton size="large" icon="Analytics_green">Grand</BaseButton>
-          <BaseButton size="xlarge" variant="Analytics_green">Très Grand</BaseButton>
+          <BaseButton size="small" icon="check">Petit</BaseButton>
+          <BaseButton size="medium" icon="home">Moyen</BaseButton>
+          <BaseButton size="large" icon="smile">Grand</BaseButton>
+          <BaseButton size="xlarge" variant="danger">Très Grand</BaseButton>
         </div>
       </div>
     </main>
