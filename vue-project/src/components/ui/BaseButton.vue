@@ -2,7 +2,7 @@
   <button 
     :class="['btn', `btn-${variant}`, sizeClasses, { 'btn-loading': loading }]"
     :disabled="disabled || loading"
-    @click="$emit('click', $event)"
+    @click="handleClick"
   >
     <img v-if="icon" :src="iconUrl" :alt="icon" class="btn-icon" />
     <span v-if="loading" class="spinner"></span>
@@ -37,10 +37,14 @@ export default {
       type: String,
       default: 'medium',
       validator: (value) => ['small', 'medium', 'large', 'xlarge'].includes(value)
+    },
+    action: {
+      type: [String, Function, Object],
+      default: null
     }
   },
   emits: ['click'],
-  setup(props) {
+  setup(props, { emit }) {
     const iconUrl = computed(() => {
       if (!props.icon) return null
       return new URL(`../../assets/icons/${props.icon}.svg`, import.meta.url).href
@@ -50,9 +54,85 @@ export default {
       return `btn-${props.size}`
     })
 
+    const handleClick = (event) => {
+      // Émettre l'événement click par défaut
+      emit('click', event)
+
+      // Traiter l'action si elle existe
+      if (props.action) {
+        handleAction(props.action)
+      }
+    }
+
+    const handleAction = (action) => {
+      // Si c'est une fonction, l'exécuter
+      if (typeof action === 'function') {
+        action()
+        return
+      }
+
+      // Si c'est une chaîne, traiter comme une URL ou une route
+      if (typeof action === 'string') {
+        // Si ça commence par http ou https, ouvrir dans un nouvel onglet
+        if (action.startsWith('http://') || action.startsWith('https://')) {
+          window.open(action, '_blank')
+          return
+        }
+
+        // Si ça commence par mailto: ou tel:, utiliser window.location
+        if (action.startsWith('mailto:') || action.startsWith('tel:')) {
+          window.location.href = action
+          return
+        }
+
+        // Sinon, traiter comme une navigation interne
+        if (action.startsWith('/') || action.startsWith('#')) {
+          window.location.href = action
+          return
+        }
+
+        // Route relative (pour Vue Router si disponible)
+        if (window.$router) {
+          window.$router.push(action)
+        } else {
+          window.location.href = action
+        }
+        return
+      }
+
+      // Si c'est un objet avec des propriétés spécifiques
+      if (typeof action === 'object') {
+        // Navigation avec Vue Router
+        if (action.route && window.$router) {
+          window.$router.push(action.route)
+          return
+        }
+
+        // URL externe
+        if (action.url) {
+          const target = action.newTab ? '_blank' : '_self'
+          window.open(action.url, target)
+          return
+        }
+
+        // Méthode à exécuter
+        if (action.method && typeof action.method === 'function') {
+          action.method(action.params || [])
+          return
+        }
+
+        // Émission d'événement personnalisé
+        if (action.emit) {
+          emit(action.emit, action.data || null)
+          return
+        }
+      }
+    }
+
     return {
       iconUrl,
-      sizeClasses
+      sizeClasses,
+      handleClick
     }
   }
 }
