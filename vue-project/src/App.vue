@@ -5,6 +5,7 @@ import AppHeader from '@/components/layout/AppHeader.vue'
 import HomePage from '@/pages/HomePage.vue'
 import TableDemo from '@/pages/TableDemo.vue'
 import ButtonActionsDemo from '@/pages/ButtonActionsDemo.vue'
+import InputDemo from '@/pages/InputDemo.vue'
 
 // Import du CSS global
 import '@/assets/styles/main.css'
@@ -26,6 +27,7 @@ const handleNavigate = (page) => {
       <HomePage v-if="currentPage === 'home'" />
       <TableDemo v-if="currentPage === 'table'" />
       <ButtonActionsDemo v-if="currentPage === 'actions'" />
+      <InputDemo v-if="currentPage === 'inputs'" />
       
       <!-- Exemple d'utilisation des composants UI -->
       <div v-if="currentPage === 'demo'" class="demo-section">
