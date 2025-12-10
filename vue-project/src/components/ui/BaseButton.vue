@@ -217,6 +217,17 @@ export default {
   background-color: #e67e22;
 }
 
+.btn-navigation {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+
+.btn-navigation:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
 /* Icône - prend la hauteur du bouton */
 .btn-icon {
   height: 250%;
