@@ -152,7 +152,7 @@ onMounted(() => {
 .demo-section {
   margin-bottom: 4rem;
   padding: 2rem;
-  background: white;
+  background: var(--background-color);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
 }

@@ -374,7 +374,7 @@ const plans = ref([
 }
 
 .input-example {
-  background: white;
+  background: var(--background-color);
   padding: 2vh;
   border-radius: 1vh;
   box-shadow: 0 0.5vh 1vh rgba(0, 0, 0, 0.1);

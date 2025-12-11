@@ -163,7 +163,7 @@ export default {
 <style scoped>
 .app-header {
   
-  color: white;
+  color: var(--background-color);
   padding: 1rem 0;
   box-shadow: var(--box-shadow);
   width: 90vw;

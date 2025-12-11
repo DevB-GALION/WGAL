@@ -183,25 +183,25 @@ export default {
 /* Couleurs des variantes */
 .btn-primary {
   background-color: var(--primary-color);
-  color: #4A65C4;
+  color: var(--background-color);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #C674D2;
+  background-color: var(--tertiary-color);
 }
 
 .btn-secondary {
   background-color: var(--secondary-color);
-  color: #B98FDB;
+  color: var(--background-color);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background-color: #C674D2;
+  background-color: var(--tertiary-color);
 }
 
 .btn-danger {
   background-color: var(--danger-color);
-  color: #4A65C4;
+  color: var(--background-color);
 }
 
 .btn-danger:hover:not(:disabled) {
@@ -210,7 +210,7 @@ export default {
 
 .btn-warning {
   background-color: var(--warning-color);
-  color: #4A65C4;
+  color: var(--background-color);
 }
 
 .btn-warning:hover:not(:disabled) {
@@ -231,7 +231,7 @@ export default {
 
 .btn-navigation:hover:not(:disabled) {
   background-color: rgba(255, 255, 255, 0.1);
-  color: #C674D2;
+  color: var(--tertiary-color);
 }
 
 /* Icône - prend la hauteur du bouton */

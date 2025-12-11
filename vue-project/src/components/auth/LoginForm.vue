@@ -1,26 +1,32 @@
 <template>
   <div class="login-form">
-    <h2>Connexion</h2>
+    <BaseTitle 
+      size="large" 
+      color="secondary" 
+      alignment="center"
+      class="login-title">
+      Connexion
+    </BaseTitle>
     
-    <form @submit.prevent="handleLogin">
+    <form @submit.prevent="handleLogin" class="login-form-container">
       <div class="form-group">
-        <label for="email">Email :</label>
-        <input 
-          id="email"
-          v-model="credentials.email" 
-          type="email" 
-          required 
+        <BaseInput
+          v-model="credentials.email"
+          type="email"
+          label="Email"
+          placeholder="Votre adresse email"
+          :required="true"
           :disabled="loading"
         />
       </div>
       
       <div class="form-group">
-        <label for="password">Mot de passe :</label>
-        <input 
-          id="password"
-          v-model="credentials.password" 
-          type="password" 
-          required 
+        <BaseInput
+          v-model="credentials.password"
+          type="password"
+          label="Mot de passe"
+          placeholder="Votre mot de passe"
+          :required="true"
           :disabled="loading"
         />
       </div>
@@ -30,10 +36,12 @@
       </div>
       
       <BaseButton 
+        variant="primary"
+        size="medium"
         type="submit" 
         :loading="loading" 
         :disabled="loading"
-      >
+        class="login-button">
         Se connecter
       </BaseButton>
     </form>
@@ -44,11 +52,15 @@
 import { ref } from 'vue'
 import { useAuth } from '@/composables/useAuth'
 import BaseButton from '@/components/ui/BaseButton.vue'
+import BaseInput from '@/components/ui/BaseInput.vue'
+import BaseTitle from '@/components/ui/BaseTitle.vue'
 
 export default {
   name: 'LoginForm',
   components: {
-    BaseButton
+    BaseButton,
+    BaseInput,
+    BaseTitle
   },
   setup() {
     const { login, loading, error } = useAuth()
@@ -89,56 +101,50 @@ export default {
 
 <style scoped>
 .login-form {
-  max-width: 400px;
+  max-width: 450px;
   margin: 2rem auto;
-  padding: 2rem;
-  background: white;
+  padding: 3rem 2.5rem;
+  background: var(--background-color);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
+  position: relative;
+}
+
+.login-title {
+  margin-bottom: 2.5rem;
+}
+
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
-}
-
-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: var(--dark-color);
-}
-
-input {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius);
-  font-size: 1rem;
-}
-
-input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
-}
-
-input:disabled {
-  background-color: #f5f5f5;
-  cursor: not-allowed;
 }
 
 .error-message {
   color: var(--danger-color);
   font-size: 0.9rem;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
+  padding: 1rem;
   background-color: rgba(231, 76, 60, 0.1);
-  border-radius: 4px;
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--danger-color);
+  font-weight: 500;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: var(--primary-color);
+.login-button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* Style pour les labels des inputs */
+.form-group :deep(label) {
+  color: var(--secondary-color) !important;
+  font-weight: 600;
 }
 </style>
