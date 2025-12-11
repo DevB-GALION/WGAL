@@ -1,39 +1,70 @@
 <template>
   <header class="app-header">
     <div class="container">
-      <div class="logo">
-        <h2>Vue App</h2>
+      <!-- Logo à gauche (toujours visible) -->
+      <div class="logo-section">
+        <BaseButton 
+          variant="iconButton" 
+          size="xlarge" 
+          @click="navigateToHome"
+          icon="logo_transparent">
+        </BaseButton>
       </div>
       
       <!-- Navigation pour utilisateurs connectés -->
       <nav v-if="isConnected" class="navigation">
         <div class="nav-buttons">
           <BaseButton 
-            variant="secondary" 
+            variant="navigation" 
             size="small" 
             @click="navigateToHome">
             Accueil
           </BaseButton>
           <BaseButton 
-            variant="secondary" 
+            variant="navigation" 
             size="small" 
             @click="navigateToDemo">
             Composants Demo
           </BaseButton>
         </div>
-        <div class="logout-section">
-          <BaseButton 
-            variant="danger" 
-            size="small" 
-            icon="Logout_Rounded_red"
-            @click="logout">
-          </BaseButton>
-        </div>
       </nav>
       
       <!-- Titre centré pour utilisateurs non connectés -->
-      <div v-else class="center-title">
-        <h1>GALION</h1>
+      <div v-if="!isConnected" class="center-title">
+        <BaseTitle 
+          size="small" 
+          color="white" 
+          align="center"  
+      >
+          GALION
+        </BaseTitle>
+         <BaseTitle
+          size="xsmall" 
+          color="white" 
+          >Gestionnaire accueil de loisir
+        </BaseTitle>
+        
+      </div>
+      
+      <!-- Section droite -->
+      <div class="right-section">
+        <!-- Bouton de déconnexion pour utilisateurs connectés -->
+        <BaseButton 
+          v-if="isConnected"
+          variant="iconButton" 
+          size="small" 
+          icon="Logout_Rounded_red"
+          @click="logout">
+        </BaseButton>
+        
+        <!-- Bouton de connexion pour utilisateurs non connectés -->
+        <BaseButton 
+          v-else
+          variant="iconButton" 
+          size="small" 
+          icon="Logout_Rounded_green"
+          @click="navigateToLogin">
+        </BaseButton>
       </div>
     </div>
   </header>
@@ -42,11 +73,13 @@
 <script>
 import { ref, computed, onMounted } from 'vue'
 import BaseButton from '../ui/BaseButton.vue'
+import BaseTitle from '../ui/BaseTitle.vue'
 
 export default {
   name: 'AppHeader',
   components: {
-    BaseButton
+    BaseButton,
+    BaseTitle
   },
   emits: ['navigate'],
   setup(props, { emit }) {
@@ -68,6 +101,10 @@ export default {
 
     const navigateToDemo = () => {
       emit('navigate', 'demo')
+    }
+
+    const navigateToLogin = () => {
+      emit('navigate', 'login')
     }
 
     // Méthode pour gérer la navigation (pour les cas complexes si nécessaire)
@@ -114,6 +151,7 @@ export default {
       isConnected,
       navigateToHome,
       navigateToDemo,
+      navigateToLogin,
       handleNavigation,
       logout,
       toggleConnection
@@ -124,7 +162,7 @@ export default {
 
 <style scoped>
 .app-header {
-  background-color: var(--primary-color);
+  
   color: white;
   padding: 1rem 0;
   box-shadow: var(--box-shadow);
@@ -136,19 +174,37 @@ export default {
 
 .container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  position: relative;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
 }
 
 .navigation {
   display: flex;
   align-items: center;
-  gap: 2rem;
 }
 
-.logout-section {
+.center-title {
+ 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.2rem;
+ 
+}
+
+.right-section {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
 }
 
 .logo h2 {
@@ -162,43 +218,21 @@ export default {
   align-items: center;
 }
 
-/* Styles personnalisés pour tous les boutons du header */
-.navigation .btn {
-  background-color: transparent !important;
-  color: white !important;
-  border: none !important;
-}
 
-.navigation .btn:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.1) !important;
-  color: white !important;
-}
 
-/* Style spécifique pour le bouton de déconnexion */
-.logout-section .btn {
-  background-color: transparent !important;
-  color: #ff6b6b !important;
-  border: none !important;
-}
-
-.logout-section .btn:hover:not(:disabled) {
-  background-color: rgba(255, 107, 107, 0.1) !important;
-  color: #ff6b6b !important;
-}
-
-.center-title {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.center-title h1 {
-  font-family: 'LazyDog', 'Poppins', sans-serif;
-  font-size: 2.5rem;
-  font-weight: bold;
-  color: white;
+.subtitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
   margin: 0;
-  letter-spacing: 0.1em;
+  text-align: center;
+  width: 100%;
+}
+
+/* S'assurer que le BaseTitle est bien centré */
+.center-title :deep(.base-title) {
+  text-align: center;
+  width: 100%;
 }
 </style>

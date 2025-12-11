@@ -52,7 +52,7 @@ export default {
     spacing: {
       type: String,
       default: 'normal',
-      validator: (value) => ['none', 'small', 'normal', 'large'].includes(value)
+      validator: (value) => ['none',"xsmall", 'small', 'normal', 'large'].includes(value)
     }
   },
   setup(props) {
@@ -133,6 +133,11 @@ export default {
 }
 
 /* Tailles des icônes et titres */
+
+.title-xsmall .title-icon {
+  width: 1.5vh;
+  height: 1.5vh;
+}
 .title-small .title-icon {
   width: 2.5vh;
   height: 2.5vh;
@@ -190,6 +195,9 @@ export default {
 .title-small .title-text {
   font-size: 2.5vh;
 }
+.title-xsmall .title-text {
+  font-size: 1.5vh;
+}
 
 .title-medium .title-text {
   font-size: 3.5vh;
@@ -244,7 +252,9 @@ export default {
 .title-spacing-small {
   margin-bottom: 1vh;
 }
-
+.title-spacing-xsmall {
+  margin-bottom: 0.5vh;
+}
 .title-spacing-normal {
   margin-bottom: 2vh;
 }
@@ -276,6 +286,11 @@ export default {
 
 /* Responsive */
 @media (max-width: 768px) {
+  
+  .title-xsmall .title-text {
+    font-size: 1.5vh;
+  }
+  
   .title-small .title-text {
     font-size: 2vh;
   }
@@ -296,6 +311,10 @@ export default {
     font-size: 6vh;
   }
   
+   .title-xsmall .title-icon {
+    width: 1.5vh;
+    height: 1.5vh;
+  }
   .title-small .title-icon {
     width: 2vh;
     height: 2vh;
