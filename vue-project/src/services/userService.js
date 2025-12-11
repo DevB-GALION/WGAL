@@ -1,4 +1,5 @@
 import db from './dbConnection'
+import config from '@/config'
 
 /**
  * userService
@@ -7,8 +8,8 @@ import db from './dbConnection'
  * - manage isConnected via localStorage + db.getToken()
  */
 
-const TOKEN_KEY = 'auth_token'
-const REFRESH_KEY = 'refresh_token'
+const TOKEN_KEY = config.auth.tokenKey || 'auth_token'
+const REFRESH_KEY = config.auth.refreshTokenKey || 'refresh_token'
 const CONNECTED_KEY = 'isConnected'
 
 const login = async (credentials) => {
@@ -51,14 +52,14 @@ const logout = async () => {
 }
 
 const refreshToken = async () => {
-  const refresh = localStorage.getItem(REFRESH_KEY)
+    const refresh = localStorage.getItem(REFRESH_KEY)
   if (!refresh) throw new Error('No refresh token available')
   const res = await db.post('/auth/refresh', { refreshToken: refresh })
   const data = res.data || {}
   const accessToken = data.accessToken || data.token || data.access_token
   if (accessToken) {
     db.setToken(accessToken)
-    localStorage.setItem(TOKEN_KEY, accessToken)
+      localStorage.setItem(TOKEN_KEY, accessToken)
   }
   return data
 }

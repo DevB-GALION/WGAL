@@ -3,7 +3,7 @@
     <BaseTitle 
       size="large" 
       color="secondary" 
-      alignment="center"
+      align="center"
       class="login-title">
       Connexion
     </BaseTitle>
@@ -72,19 +72,15 @@ export default {
 
     const handleLogin = async () => {
       try {
-        // Pour les tests, on simule une connexion réussie
-        localStorage.setItem('isConnected', 'true')
-        sessionStorage.setItem('isConnected', 'true')
-        
-        // Optionnel : utiliser le système d'auth existant
-        // await login(credentials.value)
-        
+        // Appeler le composable useAuth qui utilise authService
+        await login(credentials.value)
+
         console.log('Connexion réussie!')
-        
+
         // Émettre un événement pour indiquer la connexion réussie
         window.dispatchEvent(new CustomEvent('user-logged-in'))
-        
       } catch (err) {
+        // L'erreur est déjà gérée par useAuth (error ref)
         console.error('Erreur de connexion:', err)
       }
     }

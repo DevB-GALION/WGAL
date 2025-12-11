@@ -1,4 +1,6 @@
 import apiClient from './api'
+import db from './dbConnection'
+import config from '@/config'
 
 /**
  * Service d'authentification
@@ -12,14 +14,23 @@ export const authService = {
   async login(credentials) {
     const response = await apiClient.post('/auth/login', credentials)
     
-    // Sauvegarder les tokens
-    if (response.data.token) {
-      localStorage.setItem('auth_token', response.data.token)
+    // Sauvegarder les tokens en utilisant les clés définies dans config
+    const tokenKey = config.auth.tokenKey || 'auth_token'
+    const refreshKey = config.auth.refreshTokenKey || 'refresh_token'
+
+    const token = response.data?.token || response.data?.accessToken || response.data?.access_token
+    const refresh = response.data?.refreshToken || response.data?.refresh_token
+
+    if (token) {
+      localStorage.setItem(tokenKey, token)
+      // Appliquer le token à l'instance axios centralisée
+      try { db.setToken(token) } catch (e) { /* ignore */ }
     }
-    if (response.data.refreshToken) {
-      localStorage.setItem('refresh_token', response.data.refreshToken)
+
+    if (refresh) {
+      localStorage.setItem(refreshKey, refresh)
     }
-    
+
     return response.data
   },
 
@@ -32,9 +43,12 @@ export const authService = {
     } catch (error) {
       console.error('Erreur lors de la déconnexion:', error)
     } finally {
-      // Supprimer les tokens du localStorage
-      localStorage.removeItem('auth_token')
-      localStorage.removeItem('refresh_token')
+      // Supprimer les tokens du localStorage et nettoyer l'instance
+      const tokenKey = config.auth.tokenKey || 'auth_token'
+      const refreshKey = config.auth.refreshTokenKey || 'refresh_token'
+      localStorage.removeItem(tokenKey)
+      localStorage.removeItem(refreshKey)
+      try { db.clearToken() } catch (e) {}
     }
   },
 
@@ -53,17 +67,18 @@ export const authService = {
    * @returns {Promise} - Nouveau token
    */
   async refreshToken() {
-    const refreshToken = localStorage.getItem('refresh_token')
+    const refreshToken = localStorage.getItem(config.auth.refreshTokenKey)
     if (!refreshToken) {
       throw new Error('Aucun refresh token disponible')
     }
 
-    const response = await apiClient.post('/auth/refresh', {
-      refreshToken
-    })
+    const response = await apiClient.post('/auth/refresh', { refreshToken })
+    const tokenKey = config.auth.tokenKey || 'auth_token'
 
-    if (response.data.token) {
-      localStorage.setItem('auth_token', response.data.token)
+    const newToken = response.data?.token || response.data?.accessToken || response.data?.access_token
+    if (newToken) {
+      localStorage.setItem(tokenKey, newToken)
+      try { db.setToken(newToken) } catch (e) {}
     }
 
     return response.data
@@ -74,7 +89,8 @@ export const authService = {
    * @returns {boolean}
    */
   isAuthenticated() {
-    return !!localStorage.getItem('auth_token')
+    const tokenKey = config.auth.tokenKey || 'auth_token'
+    return !!localStorage.getItem(tokenKey)
   }
 }
 

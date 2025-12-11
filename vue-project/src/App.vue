@@ -14,39 +14,28 @@ import '@/assets/styles/main.css'
 
 // État pour la navigation et la connexion
 import { ref, computed, onMounted } from 'vue'
+import { authService } from '@/services'
 
 const currentPage = ref('home')
-const isConnected = ref(false)
 
-// Computed pour déterminer si l'utilisateur est connecté
-const userConnected = computed(() => {
-  return isConnected.value || 
-         localStorage.getItem('isConnected') === 'true' ||
-         sessionStorage.getItem('isConnected') === 'true'
-})
-
-// Vérifier l'état de connexion
-const checkConnectionStatus = () => {
-  const stored = localStorage.getItem('isConnected')
-  isConnected.value = stored === 'true'
-}
+// Utiliser la source d'auth centralisée (authService)
+const userConnected = computed(() => authService.isAuthenticated())
 
 const handleNavigate = (page) => {
   currentPage.value = page
 }
 
-// Initialiser l'état de connexion au montage
+// Écouter les événements de connexion/déconnexion
 onMounted(() => {
-  checkConnectionStatus()
-  
-  // Écouter les événements de connexion/déconnexion
   window.addEventListener('user-logged-in', () => {
-    checkConnectionStatus()
-    // Rediriger vers la page d'accueil après connexion
+    // Après connexion, s'assurer qu'on est sur la page d'accueil
     currentPage.value = 'home'
   })
-  window.addEventListener('user-logged-out', checkConnectionStatus)
-  window.addEventListener('storage', checkConnectionStatus)
+
+  window.addEventListener('user-logged-out', () => {
+    // En cas de déconnexion, retourner vers la page de connexion
+    currentPage.value = 'home'
+  })
 })
 </script>
 

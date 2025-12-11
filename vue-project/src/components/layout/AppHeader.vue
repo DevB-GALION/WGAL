@@ -33,14 +33,14 @@
       <div v-if="!isConnected" class="center-title">
         <BaseTitle 
           size="small" 
-          color="white" 
+          color="light" 
           align="center"  
       >
           GALION
         </BaseTitle>
          <BaseTitle
           size="xsmall" 
-          color="white" 
+          color="light" 
           >Gestionnaire accueil de loisir
         </BaseTitle>
         
@@ -72,6 +72,7 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue'
+import { authService } from '@/services'
 import BaseButton from '../ui/BaseButton.vue'
 import BaseTitle from '../ui/BaseTitle.vue'
 
@@ -83,16 +84,8 @@ export default {
   },
   emits: ['navigate'],
   setup(props, { emit }) {
-    // Variable de session pour l'état de connexion
-    const sessionConnected = ref(false)
-
-    // Computed pour vérifier si l'utilisateur est connecté
-    const isConnected = computed(() => {
-      // Vérifier localStorage, sessionStorage ou variable globale
-      return sessionConnected.value || 
-             localStorage.getItem('isConnected') === 'true' ||
-             sessionStorage.getItem('isConnected') === 'true'
-    })
+    // Utiliser la source d'auth centralisée
+    const isConnected = computed(() => authService.isAuthenticated())
 
     // Méthodes de navigation
     const navigateToHome = () => {
@@ -113,38 +106,24 @@ export default {
     }
 
     // Méthode pour se déconnecter
-    const logout = () => {
-      sessionConnected.value = false
-      localStorage.setItem('isConnected', 'false')
-      sessionStorage.removeItem('isConnected')
-      
+    const logout = async () => {
+      try {
+        await authService.logout()
+      } catch (e) {
+        console.error('Erreur logout:', e)
+      }
+
       // Émettre un événement de déconnexion
-      window.dispatchEvent(new CustomEvent('user-logged-out'))
-      
-      // Rediriger vers la page de connexion si nécessaire
+      try { window.dispatchEvent(new CustomEvent('user-logged-out')) } catch (e) {}
+
+      // Rediriger vers la page de connexion
       emit('navigate', 'login')
     }
 
-    // Méthode pour changer l'état de connexion (utile pour tester)
-    const toggleConnection = () => {
-      sessionConnected.value = !sessionConnected.value
-      localStorage.setItem('isConnected', sessionConnected.value.toString())
-    }
-
-    // Méthode pour vérifier l'état de connexion
-    const checkConnectionStatus = () => {
-      const stored = localStorage.getItem('isConnected')
-      sessionConnected.value = stored === 'true'
-    }
-
-    // Initialiser l'état de connexion au montage du composant
+    // Initialiser les écouteurs d'événements pour mise à jour UI
     onMounted(() => {
-      checkConnectionStatus()
-      
-      // Écouter les événements de connexion/déconnexion
-      window.addEventListener('user-logged-in', checkConnectionStatus)
-      window.addEventListener('user-logged-out', checkConnectionStatus)
-      window.addEventListener('storage', checkConnectionStatus)
+      window.addEventListener('user-logged-in', () => {})
+      window.addEventListener('user-logged-out', () => {})
     })
 
     return {
@@ -154,7 +133,7 @@ export default {
       navigateToLogin,
       handleNavigation,
       logout,
-      toggleConnection
+      
     }
   }
 }
